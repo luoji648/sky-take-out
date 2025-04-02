@@ -73,10 +73,16 @@ public class EmployeeController {
         return Result.success(employeeLoginVO);
     }
 
+    /**
+     * 新增员工
+     * @param employeeDTO
+     * @return
+     */
     @PostMapping
     @Operation(summary = "新增员工")
     public Result save(@RequestBody EmployeeDTO employeeDTO)
     {
+        log.info("新增员工");
         //DTO转PO
         Employee employee = BeanUtil.copyProperties(employeeDTO, Employee.class);
 
@@ -94,10 +100,16 @@ public class EmployeeController {
         return Result.success();
     }
 
+    /**
+     * 员工分页查询
+     * @param employeePageQueryDTO
+     * @return
+     */
     @GetMapping("/page")
     @Operation(summary = "员工分页查询")
     public Result<PageResult> page(EmployeePageQueryDTO employeePageQueryDTO)
     {
+        log.info("分页查询");
         PageResult pageResult = employeeService.pageQueryEmployee(employeePageQueryDTO);
         return Result.success(pageResult);
     }
@@ -126,6 +138,7 @@ public class EmployeeController {
     @Operation(summary = "根据id查询员工信息")
     public Result<Employee> getById(@PathVariable Long id)
     {
+        log.info("查询id为{}的员工",id);
         Employee employee = employeeService.getById(id);
         return Result.success(employee);
     }
@@ -139,7 +152,7 @@ public class EmployeeController {
     @Operation(summary = "编辑员工信息")
     public Result update(@RequestBody EmployeeDTO employeeDTO)
     {
-
+        log.info("编辑员工信息");
         employeeService.updateEmployee(employeeDTO);
         return Result.success();
     }

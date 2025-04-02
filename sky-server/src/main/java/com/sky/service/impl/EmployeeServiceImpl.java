@@ -85,7 +85,7 @@ public class EmployeeServiceImpl extends ServiceImpl<EmployeeMapper,Employee> im
     public void startOrStop(Integer status, Long id)
     {
         lambdaUpdate()
-                .set(Employee::getStatus,status)
+                .set(status != null,Employee::getStatus,status)
                 .eq(id != null,Employee::getId,id)
                 .update();
     }
