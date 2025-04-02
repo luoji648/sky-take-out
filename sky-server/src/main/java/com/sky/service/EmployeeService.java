@@ -20,4 +20,6 @@ public interface EmployeeService extends IService<Employee>
     * 员工分页查询
     * */
     PageResult pageQueryEmployee(EmployeePageQueryDTO employeePageQueryDTO);
+
+    void startOrStop(Integer status, Long id);
 }

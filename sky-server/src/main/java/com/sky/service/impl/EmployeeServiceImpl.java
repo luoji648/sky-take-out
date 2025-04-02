@@ -76,4 +76,13 @@ public class EmployeeServiceImpl extends ServiceImpl<EmployeeMapper,Employee> im
         return pageResult;
     }
 
+    @Override
+    public void startOrStop(Integer status, Long id)
+    {
+        lambdaUpdate()
+                .set(Employee::getStatus,status)
+                .eq(id != null,Employee::getId,id)
+                .update();
+    }
+
 }
