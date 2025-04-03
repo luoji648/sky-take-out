@@ -46,7 +46,8 @@ public class CategoryController
     public Result save(@RequestBody CategoryDTO categoryDTO)
     {
         log.info("新增套餐");
-        categoryService.saveCategory(categoryDTO);
+        Category category = BeanUtil.copyProperties(categoryDTO, Category.class);
+        categoryService.saveCategory(category);
         return Result.success();
     }
 
@@ -72,7 +73,8 @@ public class CategoryController
     @Operation(summary = "修改套餐")
     public Result update(@RequestBody CategoryDTO categoryDTO)
     {
-        categoryService.updateCategory(categoryDTO);
+        Category category = BeanUtil.copyProperties(categoryDTO, Category.class);
+        categoryService.updateCategory(category);
         return Result.success();
     }
 

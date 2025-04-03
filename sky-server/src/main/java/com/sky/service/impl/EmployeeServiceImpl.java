@@ -4,13 +4,16 @@ import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.metadata.OrderItem;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.sky.annotation.AutoFill;
 import com.sky.constant.MessageConstant;
+import com.sky.constant.PasswordConstant;
 import com.sky.constant.StatusConstant;
 import com.sky.context.BaseContext;
 import com.sky.dto.EmployeeDTO;
 import com.sky.dto.EmployeeLoginDTO;
 import com.sky.dto.EmployeePageQueryDTO;
 import com.sky.entity.Employee;
+import com.sky.enumeration.OperationType;
 import com.sky.exception.AccountLockedException;
 import com.sky.exception.AccountNotFoundException;
 import com.sky.exception.PasswordErrorException;
@@ -90,16 +93,23 @@ public class EmployeeServiceImpl extends ServiceImpl<EmployeeMapper,Employee> im
                 .update();
     }
 
+    @AutoFill(OperationType.UPDATE)
     @Override
-    public void updateEmployee(EmployeeDTO employeeDTO)
+    public void updateEmployee(Employee employee)
     {
-        Employee employee = BeanUtil.copyProperties(employeeDTO, Employee.class);
-        employee.setUpdateTime(LocalDateTime.now());
-        employee.setUpdateUser(BaseContext.getCurrentId());
-
         lambdaUpdate()
                 .eq(Employee::getId,employee.getId())
                 .update(employee);
+    }
+
+    @AutoFill(value = OperationType.INSERT)
+    @Override
+    public void saveEmployee(Employee employee)
+    {
+        employee.setStatus(StatusConstant.ENABLE);
+        employee.setPassword(DigestUtils.md5DigestAsHex(PasswordConstant.DEFAULT_PASSWORD.getBytes()));
+
+        save(employee);
     }
 
 

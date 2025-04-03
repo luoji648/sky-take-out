@@ -17,7 +17,7 @@ public interface CategoryService extends IService<Category> {
 
     void startOrStop(Integer status, Long id);
 
-    void saveCategory(CategoryDTO categoryDTO);
+    void saveCategory(Category category);
 
-    void updateCategory(CategoryDTO categoryDTO);
+    void updateCategory(Category category);
 }

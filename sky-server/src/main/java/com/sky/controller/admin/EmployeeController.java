@@ -86,16 +86,7 @@ public class EmployeeController {
         //DTO转PO
         Employee employee = BeanUtil.copyProperties(employeeDTO, Employee.class);
 
-        employee.setStatus(StatusConstant.ENABLE);
-        employee.setPassword(DigestUtils.md5DigestAsHex(PasswordConstant.DEFAULT_PASSWORD.getBytes()));
-        employee.setCreateTime(LocalDateTime.now());
-        employee.setUpdateTime(LocalDateTime.now());
-
-
-        employee.setCreateUser(BaseContext.getCurrentId());
-        employee.setUpdateUser(BaseContext.getCurrentId());
-
-        employeeService.save(employee);
+        employeeService.saveEmployee(employee);
 
         return Result.success();
     }
@@ -153,7 +144,8 @@ public class EmployeeController {
     public Result update(@RequestBody EmployeeDTO employeeDTO)
     {
         log.info("编辑员工信息");
-        employeeService.updateEmployee(employeeDTO);
+        Employee employee = BeanUtil.copyProperties(employeeDTO, Employee.class);
+        employeeService.updateEmployee(employee);
         return Result.success();
     }
 

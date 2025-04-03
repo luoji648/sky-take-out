@@ -24,6 +24,7 @@ public interface EmployeeService extends IService<Employee>
 
     void startOrStop(Integer status, Long id);
 
-    void updateEmployee(EmployeeDTO employeeDTO);
+    void updateEmployee(Employee employee);
 
+    void saveEmployee(Employee employee);
 }

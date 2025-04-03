@@ -4,11 +4,13 @@ import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.metadata.OrderItem;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.sky.annotation.AutoFill;
 import com.sky.constant.StatusConstant;
 import com.sky.context.BaseContext;
 import com.sky.dto.CategoryDTO;
 import com.sky.dto.CategoryPageQueryDTO;
 import com.sky.entity.Category;
+import com.sky.enumeration.OperationType;
 import com.sky.result.PageResult;
 import com.sky.service.CategoryService;
 import com.sky.mapper.CategoryMapper;
@@ -56,29 +58,17 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category>
 
     }
 
+    @AutoFill(value = OperationType.INSERT)
     @Override
-    public void saveCategory(CategoryDTO categoryDTO)
+    public void saveCategory(Category category)
     {
-        Category category = BeanUtil.copyProperties(categoryDTO, Category.class);
-
         category.setStatus(StatusConstant.ENABLE);
-
-        category.setCreateTime(LocalDateTime.now());
-        category.setUpdateTime(LocalDateTime.now());
-
-        category.setCreateUser(BaseContext.getCurrentId());
-        category.setUpdateUser(BaseContext.getCurrentId());
-
         save(category);
     }
 
     @Override
-    public void updateCategory(CategoryDTO categoryDTO)
+    public void updateCategory(Category category)
     {
-        Category category = BeanUtil.copyProperties(categoryDTO, Category.class);
-
-        category.setUpdateUser(BaseContext.getCurrentId());
-        category.setUpdateTime(LocalDateTime.now());
 
         lambdaUpdate()
                 .eq(category.getId() != null,Category::getId,category.getId())
