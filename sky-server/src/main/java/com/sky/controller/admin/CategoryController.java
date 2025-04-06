@@ -22,7 +22,7 @@ import java.util.List;
 @RestController
 @RequestMapping(("/admin/category"))
 @Slf4j
-@Tag(name = "套餐相关接口")
+@Tag(name = "分类相关接口")
 public class CategoryController
 {
     @Autowired
@@ -33,7 +33,7 @@ public class CategoryController
     private SetmealService setmealService;
 
     @GetMapping("/page")
-    @Operation(summary = "套餐分页查询")
+    @Operation(summary = "分类分页查询")
     public Result<PageResult> page(CategoryPageQueryDTO catePageQueryDTO)
     {
         log.info("套餐分页查询");
@@ -42,35 +42,35 @@ public class CategoryController
     }
 
     @PostMapping
-    @Operation(summary = "新增套餐")
+    @Operation(summary = "新增分类")
     public Result save(@RequestBody CategoryDTO categoryDTO)
     {
-        log.info("新增套餐");
+        log.info("新增分类");
         Category category = BeanUtil.copyProperties(categoryDTO, Category.class);
         categoryService.saveCategory(category);
         return Result.success();
     }
 
     @PostMapping("/status/{status}")
-    @Operation(summary = "套餐起售停售")
+    @Operation(summary = "启用禁用分类")
     public Result startOrStop(@PathVariable Integer status,Long id)
     {
-        log.info("启动、禁用员工账号：{}，{}",status,id);
+        log.info("启动、禁用分类：{}，{}",status,id);
         categoryService.startOrStop(status,id);
         return Result.success();
     }
 
-    @GetMapping("/{id}")
-    @Operation(summary = "根据id查询套餐")
-    public Result<Category> getById(@PathVariable Long id)
+    @GetMapping("/list")
+    @Operation(summary = "根据类型查询分类")
+    public Result<List<Category>> list(Integer type)
     {
-        log.info("查询id为{}的套餐",id);
-        Category category = categoryService.getById(id);
-        return Result.success(category);
+        log.info("查询类型为{}的分类",type);
+        List<Category> list = categoryService.getByType(type);
+        return Result.success(list);
     }
 
     @PutMapping
-    @Operation(summary = "修改套餐")
+    @Operation(summary = "修改分类")
     public Result update(@RequestBody CategoryDTO categoryDTO)
     {
         Category category = BeanUtil.copyProperties(categoryDTO, Category.class);
@@ -79,8 +79,8 @@ public class CategoryController
     }
 
     @DeleteMapping
-    @Operation(summary = "批量删除套餐")
-    public Result deleteById(Integer id)
+    @Operation(summary = "删除分类")
+    public Result deleteById(Long id)
     {
         categoryService.removeById(id);
         return Result.success();

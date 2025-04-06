@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.sky.entity.Setmeal;
 import com.sky.service.SetmealService;
 import com.sky.mapper.SetmealMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -14,6 +15,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class SetmealServiceImpl extends ServiceImpl<SetmealMapper, Setmeal>
     implements SetmealService{
+    @Autowired
+    private SetmealMapper setmealMapper;
 
 }
 

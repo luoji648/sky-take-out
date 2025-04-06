@@ -6,6 +6,8 @@ import com.sky.dto.CategoryPageQueryDTO;
 import com.sky.entity.Category;
 import com.sky.result.PageResult;
 
+import java.util.List;
+
 /**
 * @author liu
 * @description 针对表【category(菜品及套餐分类)】的数据库操作Service
@@ -20,4 +22,6 @@ public interface CategoryService extends IService<Category> {
     void saveCategory(Category category);
 
     void updateCategory(Category category);
+
+    List<Category> getByType(Integer type);
 }

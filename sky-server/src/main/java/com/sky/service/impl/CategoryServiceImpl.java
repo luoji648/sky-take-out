@@ -1,24 +1,20 @@
 package com.sky.service.impl;
 
-import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.metadata.OrderItem;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.sky.annotation.AutoFill;
 import com.sky.constant.StatusConstant;
-import com.sky.context.BaseContext;
-import com.sky.dto.CategoryDTO;
 import com.sky.dto.CategoryPageQueryDTO;
 import com.sky.entity.Category;
 import com.sky.enumeration.OperationType;
+import com.sky.mapper.CategoryMapper;
 import com.sky.result.PageResult;
 import com.sky.service.CategoryService;
-import com.sky.mapper.CategoryMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-import java.util.Locale;
+import java.util.List;
 
 /**
 * @author liu
@@ -39,8 +35,8 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category>
 
         Page<Category> p = lambdaQuery()
                 .like(c.getName() != null, Category::getName, c.getName())
+                .eq(c.getType()!= null, Category::getType, c.getType())
                 .page(page);
-
         PageResult pageResult = new PageResult();
         pageResult.setTotal(p.getTotal());
         pageResult.setRecords(p.getRecords());
@@ -66,13 +62,19 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category>
         save(category);
     }
 
+    @AutoFill(OperationType.UPDATE)
     @Override
     public void updateCategory(Category category)
     {
-
         lambdaUpdate()
                 .eq(category.getId() != null,Category::getId,category.getId())
                 .update(category);
+    }
+
+    @Override
+    public List<Category> getByType(Integer type)
+    {
+        return categoryMapper.getByType(type);
     }
 }
 

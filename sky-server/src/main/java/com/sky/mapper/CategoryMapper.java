@@ -1,21 +1,22 @@
 package com.sky.mapper;
 
-
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.github.pagehelper.Page;
+import com.sky.enumeration.OperationType;
+import com.sky.dto.CategoryPageQueryDTO;
 import com.sky.entity.Category;
+import org.apache.ibatis.annotations.Delete;
+import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
+import java.util.List;
 
-/**
-* @author liu
-* @description 针对表【category(菜品及套餐分类)】的数据库操作Mapper
-* @createDate 2025-04-02 11:03:58
-* @Entity com.sky.domain.Category
-*/
 @Mapper
-public interface CategoryMapper extends BaseMapper<Category> {
-
+public interface CategoryMapper extends BaseMapper<Category>
+{
+    /**
+     * 根据类型查询分类
+     * @param type
+     * @return
+     */
+    List<Category> getByType(Integer type);
 }
-
-
-
-
