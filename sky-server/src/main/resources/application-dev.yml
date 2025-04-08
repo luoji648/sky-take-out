@@ -8,9 +8,9 @@ sky:
     password: 123456
   alioss:
     endpoint: oss-cn-beijing.aliyuncs.com
-    access-key-id: LTAI5tBJXpF333dV182kKjzt
-    access-key-secret: YJhCbM2Zk49xJKVkaPe92sXepChsMP
-    bucket-name: web-tlias-liu123
+    access-key-id: 
+    access-key-secret: 
+    bucket-name: 
   redis:
     host: localhost
     port: 6379
