@@ -5,8 +5,8 @@
 
     <select id="pageMy" resultType="com.sky.vo.DishVO">
         select d.*, c.name as categoryName
-        from dish d
-        left outer join category c on d.category_id = c.id
+        from dish d left outer join category c
+        on d.category_id = c.id
         <where>
             <if test="dto.name != null">
                 and d.name like concat('%',#{dto.name},'%')

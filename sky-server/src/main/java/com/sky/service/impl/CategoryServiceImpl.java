@@ -28,14 +28,14 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category>
     @Autowired
     private CategoryMapper categoryMapper;
     @Override
-    public PageResult pageQueryCategory(CategoryPageQueryDTO c)
+    public PageResult pageQueryCategory(CategoryPageQueryDTO catePageQueryDTO)
     {
-        Page<Category> page = Page.of(c.getPage(),c.getPageSize());
+        Page<Category> page = Page.of(catePageQueryDTO.getPage(),catePageQueryDTO.getPageSize());
         page.addOrder(new OrderItem().setColumn("sort").setAsc(true));
 
         Page<Category> p = lambdaQuery()
-                .like(c.getName() != null, Category::getName, c.getName())
-                .eq(c.getType()!= null, Category::getType, c.getType())
+                .like(catePageQueryDTO.getName() != null, Category::getName, catePageQueryDTO.getName())
+                .eq(catePageQueryDTO.getType()!= null, Category::getType, catePageQueryDTO.getType())
                 .page(page);
         PageResult pageResult = new PageResult();
         pageResult.setTotal(p.getTotal());

@@ -2,8 +2,6 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.sky.mapper.SetmealDishMapper">
-
-
     <select id="listSetmealIdsByDishId" resultType="java.lang.Long">
         select id from setmeal_dish
         <where>
@@ -12,4 +10,15 @@
             </if>
         </where>
     </select>
+
+    <delete id="deleteBatchBySetmealIds">
+        delete from setmeal_dish
+        <where>
+            <if test="ids != null">
+                <foreach collection="ids" item="id" separator="," open="(" close=")">
+                    setmeal_id = #{id}
+                </foreach>
+            </if>
+        </where>
+    </delete>
 </mapper>

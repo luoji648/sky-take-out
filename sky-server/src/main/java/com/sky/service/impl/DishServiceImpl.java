@@ -128,7 +128,7 @@ public class DishServiceImpl extends ServiceImpl<DishMapper, Dish>
         if (status == StatusConstant.DISABLE) {
             List<Long> setmealIds = setmealDishMapper.listSetmealIdsByDishId(id);
             if (setmealIds != null && setmealIds.size() > 0) {
-                setmealMapper.startOrStop(setmealIds);
+                setmealMapper.StopBatchByIds(setmealIds);
             }
         }
         // 菜品状态更改

@@ -1,7 +1,13 @@
 package com.sky.service;
 
+import com.sky.dto.SetmealDTO;
+import com.sky.dto.SetmealPageQueryDTO;
 import com.sky.entity.Setmeal;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.sky.result.PageResult;
+import com.sky.vo.SetmealVO;
+
+import java.util.List;
 
 /**
 * @author liu
@@ -10,4 +16,15 @@ import com.baomidou.mybatisplus.extension.service.IService;
 */
 public interface SetmealService extends IService<Setmeal> {
 
+    PageResult pageSetmeal(SetmealPageQueryDTO setmealPageQueryDTO);
+
+    void saveSetmeal(SetmealDTO setmealDTO);
+
+    SetmealVO getSetmealById(Long id);
+
+    void deleteBatchByIds(List<Long> ids);
+
+    void startOrStop(Integer status, Long id);
+
+    void updateSetmeal(SetmealDTO setmealDTO);
 }
