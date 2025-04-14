@@ -33,7 +33,7 @@ public class ShopController {
 
     @GetMapping("/status")
     @Operation(summary = "获取营业状态")
-    public Result<Integer> getStatus(){
+    public Result<Integer> getStatus() {
         String json = stringRedisTemplate.opsForValue().get(KEY);
         // 手动反序列化
         Integer status = JSON.parseObject(json, Integer.class);

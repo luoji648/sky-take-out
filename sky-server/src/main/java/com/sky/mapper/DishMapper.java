@@ -41,4 +41,6 @@ public interface DishMapper extends BaseMapper<Dish>
     void startOrStop(Integer status, Long id);
 
     List<DishVO> listByCategoryId(Long categoryId);
+
+    List<Dish> list(Dish dish);
 }

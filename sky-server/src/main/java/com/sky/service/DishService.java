@@ -30,4 +30,6 @@ public interface DishService extends IService<Dish> {
     void startOrStop(Integer status,Long id);
 
     List<DishVO> listByCategoryId(Long categoryId);
+
+    List<DishVO> listWithFlavor(Dish dish);
 }

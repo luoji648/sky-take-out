@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/user/shop")
 @Slf4j
-@Tag(name = "店铺操作接口")
+@Tag(name = "C端-店铺操作接口")
 public class UserShopController {
 
     public static final String KEY = "SHOP_STATUS";
