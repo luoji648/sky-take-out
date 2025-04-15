@@ -1,6 +1,7 @@
 package com.sky.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.sky.annotation.AutoFill;
@@ -21,11 +22,13 @@ import com.sky.service.DishService;
 import com.sky.vo.DishVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author liu
@@ -44,11 +47,17 @@ public class DishServiceImpl extends ServiceImpl<DishMapper, Dish>
     private SetmealDishMapper setmealDishMapper;
     @Autowired
     private SetmealMapper setmealMapper;
+    @Autowired
+    private StringRedisTemplate redisTemplate;
 
     @Override
     @AutoFill(value = OperationType.INSERT)
     @Transactional
     public void saveDishWithFlavor(Dish dish, List<DishFlavor> flavors) {
+        // 清除redis中的缓存数据
+        String key = "dish_" + dish.getCategoryId();
+        clearCache(key);
+
         //向菜品表中插入1条数据
         dishMapper.insert(dish);
 
@@ -74,6 +83,9 @@ public class DishServiceImpl extends ServiceImpl<DishMapper, Dish>
 
     @Override
     public void deleteBatchByIds(List<Long> ids) {
+        // 清除redis中的缓存数据
+        clearCache("dish_*");
+
         List<Dish> dishes = listByIds(ids);
         for (Dish dish : dishes) {
             // 判断当前菜品是否能删除--是否在起售中
@@ -106,9 +118,13 @@ public class DishServiceImpl extends ServiceImpl<DishMapper, Dish>
 
     @Override
     public void updateMy(DishDTO dishDTO) {
+        // 清除redis中的缓存数据
+        clearCache("dish_*");
+
         // 更新菜品表
         Dish dish = BeanUtil.copyProperties(dishDTO, Dish.class);
         dishMapper.updateMy(dish);
+
         // 更新关联的口味
         // 删除再插入
         dishFlavorMapper.deleteByDishId(dishDTO.getId());
@@ -126,6 +142,9 @@ public class DishServiceImpl extends ServiceImpl<DishMapper, Dish>
 
     @Override
     public void startOrStop(Integer status, Long id) {
+        // 清除redis中的缓存数据
+        clearCache("dish_*");
+
         // 如果是停售操作，还要将菜品关联的套餐删了
         if (status == StatusConstant.DISABLE) {
             List<Long> setmealIds = setmealDishMapper.listSetmealIdsByDishId(id);
@@ -133,6 +152,7 @@ public class DishServiceImpl extends ServiceImpl<DishMapper, Dish>
                 setmealMapper.StopBatchByIds(setmealIds);
             }
         }
+
         // 菜品状态更改
         dishMapper.startOrStop(status, id);
     }
@@ -144,6 +164,18 @@ public class DishServiceImpl extends ServiceImpl<DishMapper, Dish>
 
     @Override
     public List<DishVO> listWithFlavor(Dish dish) {
+        // 查询redis中是否有数据
+        String key = "dish_" + dish.getCategoryId();
+        String jsonDishVOList = redisTemplate.opsForValue().get(key);
+        // 手动反序列化
+        List<DishVO> dishVOS = JSON.parseArray(jsonDishVOList, DishVO.class);
+
+        // 如果存在，直接返回，无需查询数据库
+        if (dishVOS != null && dishVOS.size() > 0) {
+            return dishVOS;
+        }
+
+        // 如果不存在，查询数据库，将查询到的数据放入redis中
         List<Dish> dishList = dishMapper.list(dish);
 
         List<DishVO> dishVOList = new ArrayList<>();
@@ -152,14 +184,27 @@ public class DishServiceImpl extends ServiceImpl<DishMapper, Dish>
             DishVO dishVO = new DishVO();
             BeanUtils.copyProperties(d,dishVO);
 
-            //根据菜品id查询对应的口味
+            // 根据菜品id查询对应的口味
             List<DishFlavor> flavors = dishFlavorMapper.getByDishId(d.getId());
 
             dishVO.setFlavors(flavors);
             dishVOList.add(dishVO);
         }
 
+        // 手动序列化，存入redis
+        String json = JSON.toJSONString(dishVOList);
+        redisTemplate.opsForValue().set(key, json);
+
         return dishVOList;
+    }
+
+    /**
+     * 清除redis中的缓存数据
+     * @param pattern
+     */
+    private void clearCache(String pattern) {
+        Set<String> keys = redisTemplate.keys("dish_*");
+        redisTemplate.delete(keys);
     }
 }
 

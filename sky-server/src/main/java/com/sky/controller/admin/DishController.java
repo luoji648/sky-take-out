@@ -84,10 +84,11 @@ public class DishController {
 
     @GetMapping("/list")
     @Operation(summary = "根据分类id查询菜品")
-    public Result<List<DishVO>> listByCategoryId(Long categoryId){
+    public Result<List<DishVO>> listByCategoryId(Long categoryId) {
         log.info("根据分类id查询菜品");
         List<DishVO> dishVOS = dishService.listByCategoryId(categoryId);
 
         return Result.success(dishVOS);
     }
+
 }
