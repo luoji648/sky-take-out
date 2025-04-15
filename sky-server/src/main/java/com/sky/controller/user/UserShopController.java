@@ -1,6 +1,7 @@
 package com.sky.controller.user;
 
 import com.alibaba.fastjson.JSON;
+import com.sky.context.BaseContext;
 import com.sky.result.Result;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -26,7 +27,7 @@ public class UserShopController {
         String json = stringRedisTemplate.opsForValue().get(KEY);
         // 手动反序列化
         Integer status = JSON.parseObject(json, Integer.class);
-        log.info("设置店铺的营业状态为：{}",status == 1 ? "营业中" : "打烊中");
+        log.info("设置店铺的营业状态为：{}", status == 1 ? "营业中" : "打烊中");
 
         return Result.success(status);
     }
