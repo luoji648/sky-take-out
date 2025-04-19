@@ -40,6 +40,9 @@ public interface ShoppingCartMapper extends BaseMapper<ShoppingCart> {
 
     @Select("select shopping_cart.setmeal_id from shopping_cart where user_id = #{userId}")
     Long getSetmealId(Long userId);
+
+    @Delete("delete from shopping_cart where user_id = #{userId}")
+    void deleteByUserId(Long userId);
 }
 
 
