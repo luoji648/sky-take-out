@@ -20,11 +20,23 @@
     <select id="page" resultType="com.sky.entity.Orders">
         select * from orders
         <where>
-            <if test="dto.status != null">
-                and orders.status = #{dto.status}
+            <if test="dto.number != null and dto.number!=''">
+                and number like concat('%',#{dto.number},'%')
+            </if>
+            <if test="dto.phone != null and dto.phone!=''">
+                and phone like concat('%',#{dto.phone},'%')
             </if>
             <if test="dto.userId != null">
-                and orders.user_id = #{dto.userId}
+                and user_id = #{dto.userId}
+            </if>
+            <if test="dto.status != null">
+                and status = #{dto.status}
+            </if>
+            <if test="dto.beginTime != null">
+                and order_time &gt;= #{dto.beginTime}
+            </if>
+            <if test="dto.endTime != null">
+                and order_time &lt;= #{dto.endTime}
             </if>
         </where>
         order by order_time desc

@@ -26,4 +26,7 @@ public interface OrdersMapper extends BaseMapper<Orders> {
     void updateMy(Orders orders);
 
     Page<Orders> page(@Param("page") Page<Orders> page, @Param("dto") OrdersPageQueryDTO ordersPageQueryDTO);
+
+    @Select("select COUNT(*) from orders where status = #{status}")
+    Integer countByStatus(Integer status);
 }
