@@ -1,6 +1,5 @@
 package com.sky.controller.admin;
 
-import cn.hutool.core.collection.ListUtil;
 import com.sky.result.Result;
 import com.sky.service.ReportService;
 import com.sky.vo.OrderReportVO;
@@ -9,8 +8,8 @@ import com.sky.vo.TurnoverReportVO;
 import com.sky.vo.UserReportVO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -68,5 +67,12 @@ public class ReportController {
         log.info("查询销量排名top10");
         SalesTop10ReportVO salesTop10ReportVO = reportService.getSalesTop10(begin, end);
         return Result.success(salesTop10ReportVO);
+    }
+
+    @GetMapping("/export")
+    @Operation(summary = "导出Excel报表接口")
+    public void export(HttpServletResponse response) {
+        log.info("导出Excel报表");
+        reportService.export(response);
     }
 }
