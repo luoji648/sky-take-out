@@ -1,20 +1,11 @@
 package com.sky.mapper;
 
-import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.sky.annotation.AutoFill;
-import com.sky.constant.StatusConstant;
-import com.sky.dto.SetmealPageQueryDTO;
-import com.sky.entity.Setmeal;
 import com.sky.entity.User;
-import com.sky.enumeration.OperationType;
-import com.sky.vo.SetmealVO;
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
-import java.util.List;
+import java.util.Map;
 
 /**
 * @author liu
@@ -30,6 +21,8 @@ public interface UserMapper extends BaseMapper<User> {
 
     @Select("select * from user where id = #{userId}")
     User getById(Long userId);
+
+    Integer countByMap(Map<String, Object> map);
 }
 
 
