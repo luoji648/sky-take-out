@@ -4,12 +4,14 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.sky.dto.OrdersPageQueryDTO;
 import com.sky.entity.Orders;
+import org.apache.ibatis.annotations.MapKey;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface OrdersMapper extends BaseMapper<Orders> {
@@ -35,4 +37,6 @@ public interface OrdersMapper extends BaseMapper<Orders> {
 
     @Select("select * from orders where status = #{status} and order_time < #{orderTime}")
     List<Orders> listByStatusAndOrderTimeLT(Integer status, LocalDateTime orderTime);
+
+    Double sumByMap(Map<String, Object> map);
 }
