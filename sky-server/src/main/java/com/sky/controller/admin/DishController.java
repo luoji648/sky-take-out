@@ -26,12 +26,17 @@ public class DishController {
     @Autowired
     private DishService dishService;
 
+    /**
+     * 菜品分页查询
+     *
+     * @param dishPageQueryDTO
+     * @return
+     */
     @GetMapping("/page")
     @Operation(summary = "菜品分页查询")
     private Result<PageResult> page(DishPageQueryDTO dishPageQueryDTO) {
         log.info("菜品分页查询");
         PageResult pageResult = dishService.pageDish(dishPageQueryDTO);
-
         return Result.success(pageResult);
     }
 
